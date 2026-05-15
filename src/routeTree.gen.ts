@@ -9,38 +9,161 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ObrasRouteImport } from './routes/obras'
+import { Route as NrsRouteImport } from './routes/nrs'
+import { Route as DocumentosRouteImport } from './routes/documentos'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FuncionariosIndexRouteImport } from './routes/funcionarios.index'
+import { Route as FuncionariosNovoRouteImport } from './routes/funcionarios.novo'
+import { Route as FuncionariosIdRouteImport } from './routes/funcionarios.$id'
 
+const ObrasRoute = ObrasRouteImport.update({
+  id: '/obras',
+  path: '/obras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NrsRoute = NrsRouteImport.update({
+  id: '/nrs',
+  path: '/nrs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentosRoute = DocumentosRouteImport.update({
+  id: '/documentos',
+  path: '/documentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FuncionariosIndexRoute = FuncionariosIndexRouteImport.update({
+  id: '/funcionarios/',
+  path: '/funcionarios/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FuncionariosNovoRoute = FuncionariosNovoRouteImport.update({
+  id: '/funcionarios/novo',
+  path: '/funcionarios/novo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FuncionariosIdRoute = FuncionariosIdRouteImport.update({
+  id: '/funcionarios/$id',
+  path: '/funcionarios/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/documentos': typeof DocumentosRoute
+  '/nrs': typeof NrsRoute
+  '/obras': typeof ObrasRoute
+  '/funcionarios/$id': typeof FuncionariosIdRoute
+  '/funcionarios/novo': typeof FuncionariosNovoRoute
+  '/funcionarios/': typeof FuncionariosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/documentos': typeof DocumentosRoute
+  '/nrs': typeof NrsRoute
+  '/obras': typeof ObrasRoute
+  '/funcionarios/$id': typeof FuncionariosIdRoute
+  '/funcionarios/novo': typeof FuncionariosNovoRoute
+  '/funcionarios': typeof FuncionariosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/documentos': typeof DocumentosRoute
+  '/nrs': typeof NrsRoute
+  '/obras': typeof ObrasRoute
+  '/funcionarios/$id': typeof FuncionariosIdRoute
+  '/funcionarios/novo': typeof FuncionariosNovoRoute
+  '/funcionarios/': typeof FuncionariosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/configuracoes'
+    | '/documentos'
+    | '/nrs'
+    | '/obras'
+    | '/funcionarios/$id'
+    | '/funcionarios/novo'
+    | '/funcionarios/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/configuracoes'
+    | '/documentos'
+    | '/nrs'
+    | '/obras'
+    | '/funcionarios/$id'
+    | '/funcionarios/novo'
+    | '/funcionarios'
+  id:
+    | '__root__'
+    | '/'
+    | '/configuracoes'
+    | '/documentos'
+    | '/nrs'
+    | '/obras'
+    | '/funcionarios/$id'
+    | '/funcionarios/novo'
+    | '/funcionarios/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConfiguracoesRoute: typeof ConfiguracoesRoute
+  DocumentosRoute: typeof DocumentosRoute
+  NrsRoute: typeof NrsRoute
+  ObrasRoute: typeof ObrasRoute
+  FuncionariosIdRoute: typeof FuncionariosIdRoute
+  FuncionariosNovoRoute: typeof FuncionariosNovoRoute
+  FuncionariosIndexRoute: typeof FuncionariosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/obras': {
+      id: '/obras'
+      path: '/obras'
+      fullPath: '/obras'
+      preLoaderRoute: typeof ObrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nrs': {
+      id: '/nrs'
+      path: '/nrs'
+      fullPath: '/nrs'
+      preLoaderRoute: typeof NrsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documentos': {
+      id: '/documentos'
+      path: '/documentos'
+      fullPath: '/documentos'
+      preLoaderRoute: typeof DocumentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +171,50 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/funcionarios/': {
+      id: '/funcionarios/'
+      path: '/funcionarios'
+      fullPath: '/funcionarios/'
+      preLoaderRoute: typeof FuncionariosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/funcionarios/novo': {
+      id: '/funcionarios/novo'
+      path: '/funcionarios/novo'
+      fullPath: '/funcionarios/novo'
+      preLoaderRoute: typeof FuncionariosNovoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/funcionarios/$id': {
+      id: '/funcionarios/$id'
+      path: '/funcionarios/$id'
+      fullPath: '/funcionarios/$id'
+      preLoaderRoute: typeof FuncionariosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConfiguracoesRoute: ConfiguracoesRoute,
+  DocumentosRoute: DocumentosRoute,
+  NrsRoute: NrsRoute,
+  ObrasRoute: ObrasRoute,
+  FuncionariosIdRoute: FuncionariosIdRoute,
+  FuncionariosNovoRoute: FuncionariosNovoRoute,
+  FuncionariosIndexRoute: FuncionariosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
