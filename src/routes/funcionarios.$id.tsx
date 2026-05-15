@@ -42,8 +42,8 @@ export const Route = createFileRoute("/funcionarios/$id")({
 });
 
 function Detail() {
-  const { employee: e } = Route.useLoaderData();
-  const initials = e.name.split(" ").slice(0, 2).map((n) => n[0]).join("");
+  const { employee: e } = Route.useLoaderData() as { employee: import("@/lib/employees").Employee };
+  const initials = e.name.split(" ").slice(0, 2).map((n: string) => n[0]).join("");
 
   return (
     <PageShell

@@ -166,7 +166,7 @@ export const employees: Employee[] = [
   },
 ];
 
-export function getEmployee(id: string) {
+export function getEmployee(id: string): Employee | undefined {
   return employees.find((e) => e.id === id);
 }
 
