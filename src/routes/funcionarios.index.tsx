@@ -24,6 +24,7 @@ export const Route = createFileRoute("/funcionarios/")({
 });
 
 function List() {
+  const sites = useSites();
   const [q, setQ] = useState("");
   const [site, setSite] = useState<string>("todos");
   const [dept, setDept] = useState<string>("todos");
@@ -76,7 +77,7 @@ function List() {
           <SelectContent>
             <SelectItem value="todos">Todas as obras</SelectItem>
             {sites.map((s) => (
-              <SelectItem key={s} value={s}>{s}</SelectItem>
+              <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
