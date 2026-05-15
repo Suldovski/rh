@@ -13,7 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { employees, sites } from "@/lib/employees";
+import { employees } from "@/lib/employees";
+import { useSites } from "@/lib/sites-store";
 
 export const Route = createFileRoute("/funcionarios/")({
   head: () => ({

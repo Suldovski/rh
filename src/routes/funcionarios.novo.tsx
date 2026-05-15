@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { sites } from "@/lib/employees";
+import { useSites } from "@/lib/sites-store";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export const Route = createFileRoute("/funcionarios/novo")({
   head: () => ({ meta: [{ title: "Novo cadastro · Buca Geral RH" }] }),
@@ -19,6 +20,8 @@ export const Route = createFileRoute("/funcionarios/novo")({
 
 function NewEmployee() {
   const navigate = useNavigate();
+  const sites = useSites();
+  const [accountType, setAccountType] = useState<"cc" | "cp">("cc");
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = (e: React.FormEvent) => {
@@ -78,7 +81,7 @@ function NewEmployee() {
               <Select>
                 <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                 <SelectContent>
-                  {sites.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                  {sites.map((s) => <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>)}
                 </SelectContent>
               </Select>
             </FormField>
@@ -91,10 +94,37 @@ function NewEmployee() {
           <CardHeader>
             <CardTitle className="font-display text-lg">Documentos trabalhistas</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-3">
+          <CardContent className="grid gap-4 md:grid-cols-2">
             <FormField label="CTPS"><Input placeholder="0000000/0000" /></FormField>
             <FormField label="PIS/PASEP"><Input placeholder="000.00000.00-0" /></FormField>
-            <FormField label="Título de eleitor"><Input placeholder="0000 0000 0000" /></FormField>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="font-display text-lg">Dados bancários</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-4 md:grid-cols-3">
+            <FormField label="Banco"><Input placeholder="Ex: Itaú, Bradesco, Caixa" /></FormField>
+            <FormField label="Agência"><Input placeholder="0000" /></FormField>
+            <FormField label="Conta"><Input placeholder="00000-0" /></FormField>
+            <FormField label="Tipo de conta">
+              <RadioGroup
+                value={accountType}
+                onValueChange={(v) => setAccountType(v as "cc" | "cp")}
+                className="flex gap-4 pt-2"
+              >
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <RadioGroupItem value="cc" /> Conta Corrente
+                </label>
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <RadioGroupItem value="cp" /> Conta Poupança
+                </label>
+              </RadioGroup>
+            </FormField>
+            <FormField label="Chave PIX" className="md:col-span-2">
+              <Input placeholder="CPF, e-mail, telefone ou chave aleatória" />
+            </FormField>
           </CardContent>
         </Card>
 
