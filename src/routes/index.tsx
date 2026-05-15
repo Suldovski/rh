@@ -2,39 +2,44 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Users,
   HardHat,
-  ShieldCheck,
   TrendingUp,
   ArrowUpRight,
   CalendarClock,
   AlertTriangle,
   Plus,
+  ShieldCheck,
 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
-import { employees, sites } from "@/lib/employees";
+import { employees } from "@/lib/employees";
+import { useSites } from "@/lib/sites-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Painel · Buca Geral RH" },
-      { name: "description", content: "Visão geral do RH da construtora — funcionários, obras e NRs." },
+      { name: "description", content: "Visão geral do RH da construtora — funcionários e obras." },
     ],
   }),
   component: Dashboard,
 });
 
 function Dashboard() {
+  const sites = useSites();
   const ativos = employees.filter((e) => e.status === "ativo").length;
   const ferias = employees.filter((e) => e.status === "ferias").length;
   const afastados = employees.filter((e) => e.status === "afastado").length;
 
-  const kpis = [
-    { label: "Funcionários ativos", value: ativos, hint: "+2 este mês", icon: Users, tone: "text-accent" },
-    { label: "Obras em andamento", value: sites.length, hint: "4 canteiros", icon: HardHat, tone: "text-primary" },
-    { label: "Em férias", value: ferias, hint: "este período", icon: CalendarClock, tone: "text-success" },
-    { label: "NRs a vencer (30d)", value: 7, hint: "ação requerida", icon: AlertTriangle, tone: "text-destructive" },
+  type Kpi = {
+    label: string; value: number; hint: string;
+    icon: typeof Users; tone: string; to: "/funcionarios" | "/obras" | "/funcionarios/ferias";
+  };
+  const kpis: Kpi[] = [
+    { label: "Funcionários ativos", value: ativos, hint: "ver lista completa", icon: Users, tone: "text-accent", to: "/funcionarios" },
+    { label: "Obras em andamento", value: sites.length, hint: "gerenciar canteiros", icon: HardHat, tone: "text-primary", to: "/obras" },
+    { label: "Em férias", value: ferias, hint: "ver colaboradores", icon: CalendarClock, tone: "text-success", to: "/funcionarios/ferias" },
   ];
 
   const recentes = [...employees].slice(0, 5);
@@ -43,7 +48,7 @@ function Dashboard() {
     <PageShell
       eyebrow="Painel geral"
       title="Bom dia, Carla"
-      description="Acompanhe os indicadores de pessoal, certificações de segurança e movimentações nos canteiros."
+      description="Acompanhe os indicadores de pessoal e movimentações nos canteiros."
       actions={
         <>
           <Button variant="outline" asChild>
@@ -57,22 +62,30 @@ function Dashboard() {
         </>
       }
     >
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-3">
         {kpis.map((k) => (
-          <Card key={k.label} className="border-l-4 border-l-accent shadow-sm">
-            <CardContent className="flex items-start justify-between p-5">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  {k.label}
-                </p>
-                <p className="mt-2 font-display text-4xl">{k.value}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{k.hint}</p>
-              </div>
-              <div className="rounded-md bg-muted p-2">
-                <k.icon className={`h-5 w-5 ${k.tone}`} />
-              </div>
-            </CardContent>
-          </Card>
+          <Link
+            key={k.label}
+            to={k.to}
+            className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <Card className="border-l-4 border-l-accent shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+              <CardContent className="flex items-start justify-between p-5">
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    {k.label}
+                  </p>
+                  <p className="mt-2 font-display text-4xl">{k.value}</p>
+                  <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground transition group-hover:text-accent">
+                    {k.hint} <ArrowUpRight className="h-3 w-3" />
+                  </p>
+                </div>
+                <div className="rounded-md bg-muted p-2">
+                  <k.icon className={`h-5 w-5 ${k.tone}`} />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
@@ -122,19 +135,18 @@ function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-4">
             {sites.map((s) => {
-              const count = employees.filter((e) => e.site === s).length;
-              const pct = (count / employees.length) * 100;
+              const count = employees.filter((e) => e.site === s.name).length;
+              const pct = employees.length ? (count / employees.length) * 100 : 0;
               return (
-                <div key={s}>
+                <div key={s.id}>
                   <div className="mb-1 flex items-center justify-between text-sm">
-                    <span className="font-medium">{s}</span>
+                    <Link to="/obras/$id" params={{ id: s.id }} className="font-medium hover:text-accent">
+                      {s.name}
+                    </Link>
                     <span className="text-muted-foreground">{count}</span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full bg-accent transition-all"
-                      style={{ width: `${pct}%` }}
-                    />
+                    <div className="h-full bg-accent transition-all" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );
@@ -147,18 +159,7 @@ function Dashboard() {
         </Card>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardContent className="flex items-start gap-3 p-5">
-            <div className="rounded-md bg-destructive/10 p-2">
-              <AlertTriangle className="h-5 w-5 text-destructive" />
-            </div>
-            <div>
-              <p className="font-semibold">3 NR-35 vencem em 7 dias</p>
-              <p className="text-xs text-muted-foreground">Trabalho em altura — reciclagem obrigatória.</p>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
         <Card>
           <CardContent className="flex items-start gap-3 p-5">
             <div className="rounded-md bg-warning/20 p-2">
@@ -173,7 +174,7 @@ function Dashboard() {
         <Card>
           <CardContent className="flex items-start gap-3 p-5">
             <div className="rounded-md bg-accent/15 p-2">
-              <CalendarClock className="h-5 w-5 text-accent" />
+              <AlertTriangle className="h-5 w-5 text-accent" />
             </div>
             <div>
               <p className="font-semibold">{afastados} afastamento(s) ativo(s)</p>

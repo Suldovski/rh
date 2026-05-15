@@ -5,7 +5,6 @@ import {
   UserPlus,
   HardHat,
   FileText,
-  ShieldCheck,
   Settings,
 } from "lucide-react";
 
@@ -32,7 +31,6 @@ const main = [
 const ops = [
   { title: "Obras", url: "/obras", icon: HardHat },
   { title: "Documentos", url: "/documentos", icon: FileText },
-  { title: "NRs & Treinamentos", url: "/nrs", icon: ShieldCheck },
 ];
 
 export function AppSidebar() {
