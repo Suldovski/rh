@@ -27,7 +27,7 @@ export const Route = createFileRoute("/funcionarios/$id")({
   loader: ({ params }) => {
     const employee = getEmployee(params.id);
     if (!employee) throw notFound();
-    return { employee };
+    return { employee: employee! };
   },
   notFoundComponent: () => (
     <div className="p-12 text-center">
