@@ -1,9 +1,11 @@
 import { ReactNode } from "react";
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, LogOut } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { authStore, useAuth } from "@/lib/auth-store";
 
 interface PageShellProps {
   title: string;
@@ -14,6 +16,13 @@ interface PageShellProps {
 }
 
 export function PageShell({ title, eyebrow, description, actions, children }: PageShellProps) {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const user = auth.users.find((u) => u.id === auth.currentUserId);
+  const initials = user
+    ? user.name.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase()
+    : "??";
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur md:px-8">
@@ -32,16 +41,27 @@ export function PageShell({ title, eyebrow, description, actions, children }: Pa
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-                CM
+                {initials}
               </AvatarFallback>
             </Avatar>
             <div className="hidden text-right leading-tight md:block">
-              <p className="text-xs font-semibold">Carla Mendes</p>
+              <p className="text-xs font-semibold">{user?.name ?? "Convidado"}</p>
               <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                RH · Admin
+                {user?.role ?? "—"}
               </p>
             </div>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Sair"
+            onClick={() => {
+              authStore.logout();
+              navigate({ to: "/login" });
+            }}
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
         </div>
       </header>
 
