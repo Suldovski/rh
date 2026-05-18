@@ -18,7 +18,7 @@ import { useSites } from "@/lib/sites-store";
 
 export const Route = createFileRoute("/funcionarios/")({
   head: () => ({
-    meta: [{ title: "Funcionários · Buca Geral RH" }],
+    meta: [{ title: "Funcionários · Bucagrans RH" }],
   }),
   component: List,
 });

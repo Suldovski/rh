@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-const KEY = "buca.payroll.v1";
+const KEY = "bucagrans.payroll.v1";
 
 type PayrollMap = Record<string, number>; // employeeId -> salary value
 

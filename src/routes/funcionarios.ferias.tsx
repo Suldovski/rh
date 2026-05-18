@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { employees } from "@/lib/employees";
 
 export const Route = createFileRoute("/funcionarios/ferias")({
-  head: () => ({ meta: [{ title: "Funcionários em férias · Buca Geral RH" }] }),
+  head: () => ({ meta: [{ title: "Funcionários em férias · Bucagrans RH" }] }),
   component: Ferias,
 });
 

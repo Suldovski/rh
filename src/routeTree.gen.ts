@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ObrasRouteImport } from './routes/obras'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as FolhaSalarialRouteImport } from './routes/folha-salarial'
 import { Route as DocumentosRouteImport } from './routes/documentos'
 import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
@@ -23,6 +24,11 @@ import { Route as FuncionariosIdRouteImport } from './routes/funcionarios.$id'
 const ObrasRoute = ObrasRouteImport.update({
   id: '/obras',
   path: '/obras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FolhaSalarialRoute = FolhaSalarialRouteImport.update({
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/configuracoes': typeof ConfiguracoesRoute
   '/documentos': typeof DocumentosRoute
   '/folha-salarial': typeof FolhaSalarialRoute
+  '/login': typeof LoginRoute
   '/obras': typeof ObrasRouteWithChildren
   '/funcionarios/$id': typeof FuncionariosIdRoute
   '/funcionarios/ferias': typeof FuncionariosFeriasRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/configuracoes': typeof ConfiguracoesRoute
   '/documentos': typeof DocumentosRoute
   '/folha-salarial': typeof FolhaSalarialRoute
+  '/login': typeof LoginRoute
   '/obras': typeof ObrasRouteWithChildren
   '/funcionarios/$id': typeof FuncionariosIdRoute
   '/funcionarios/ferias': typeof FuncionariosFeriasRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/configuracoes': typeof ConfiguracoesRoute
   '/documentos': typeof DocumentosRoute
   '/folha-salarial': typeof FolhaSalarialRoute
+  '/login': typeof LoginRoute
   '/obras': typeof ObrasRouteWithChildren
   '/funcionarios/$id': typeof FuncionariosIdRoute
   '/funcionarios/ferias': typeof FuncionariosFeriasRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/configuracoes'
     | '/documentos'
     | '/folha-salarial'
+    | '/login'
     | '/obras'
     | '/funcionarios/$id'
     | '/funcionarios/ferias'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/configuracoes'
     | '/documentos'
     | '/folha-salarial'
+    | '/login'
     | '/obras'
     | '/funcionarios/$id'
     | '/funcionarios/ferias'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/configuracoes'
     | '/documentos'
     | '/folha-salarial'
+    | '/login'
     | '/obras'
     | '/funcionarios/$id'
     | '/funcionarios/ferias'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   ConfiguracoesRoute: typeof ConfiguracoesRoute
   DocumentosRoute: typeof DocumentosRoute
   FolhaSalarialRoute: typeof FolhaSalarialRoute
+  LoginRoute: typeof LoginRoute
   ObrasRoute: typeof ObrasRouteWithChildren
   FuncionariosIdRoute: typeof FuncionariosIdRoute
   FuncionariosFeriasRoute: typeof FuncionariosFeriasRoute
@@ -166,6 +179,13 @@ declare module '@tanstack/react-router' {
       path: '/obras'
       fullPath: '/obras'
       preLoaderRoute: typeof ObrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/folha-salarial': {
@@ -249,6 +269,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConfiguracoesRoute: ConfiguracoesRoute,
   DocumentosRoute: DocumentosRoute,
   FolhaSalarialRoute: FolhaSalarialRoute,
+  LoginRoute: LoginRoute,
   ObrasRoute: ObrasRouteWithChildren,
   FuncionariosIdRoute: FuncionariosIdRoute,
   FuncionariosFeriasRoute: FuncionariosFeriasRoute,

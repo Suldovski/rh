@@ -19,7 +19,7 @@ import { useSites } from "@/lib/sites-store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Painel · Buca Geral RH" },
+      { title: "Painel · Bucagrans RH" },
       { name: "description", content: "Visão geral do RH da construtora — funcionários e obras." },
     ],
   }),

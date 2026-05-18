@@ -14,7 +14,7 @@ import { useSites } from "@/lib/sites-store";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export const Route = createFileRoute("/funcionarios/novo")({
-  head: () => ({ meta: [{ title: "Novo cadastro · Buca Geral RH" }] }),
+  head: () => ({ meta: [{ title: "Novo cadastro · Bucagrans RH" }] }),
   component: NewEmployee,
 });
 
@@ -54,7 +54,7 @@ function NewEmployee() {
             <FormField label="CPF" required><Input required placeholder="000.000.000-00" /></FormField>
             <FormField label="RG"><Input placeholder="00.000.000-0" /></FormField>
             <FormField label="Data de nascimento"><Input type="date" /></FormField>
-            <FormField label="E-mail"><Input type="email" placeholder="nome@buca.com.br" /></FormField>
+            <FormField label="E-mail"><Input type="email" placeholder="nome@bucagrans.com.br" /></FormField>
             <FormField label="Telefone"><Input placeholder="(00) 00000-0000" /></FormField>
             <FormField label="Endereço" className="md:col-span-2"><Input placeholder="Rua, número, bairro, cidade" /></FormField>
           </CardContent>
