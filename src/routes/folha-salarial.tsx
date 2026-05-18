@@ -14,7 +14,7 @@ import { useSites } from "@/lib/sites-store";
 import { payrollStore, usePayroll } from "@/lib/payroll-store";
 
 export const Route = createFileRoute("/folha-salarial")({
-  head: () => ({ meta: [{ title: "Folha Salarial · Buca Geral RH" }] }),
+  head: () => ({ meta: [{ title: "Folha Salarial · Bucagrans RH" }] }),
   component: FolhaSalarial,
 });
 
@@ -60,7 +60,7 @@ function FolhaSalarial() {
     const doc = new jsPDF({ orientation: "landscape" });
     const today = new Date().toLocaleDateString("pt-BR");
     doc.setFontSize(16);
-    doc.text("Folha Salarial — Buca Geral RH", 14, 15);
+    doc.text("Folha Salarial — Bucagrans RH", 14, 15);
     doc.setFontSize(10);
     doc.setTextColor(100);
     doc.text(`Emitido em ${today}`, 14, 21);

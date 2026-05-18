@@ -10,13 +10,13 @@ export interface Site {
   description?: string;
 }
 
-const KEY = "buca.sites.v1";
+const KEY = "bucagrans.sites.v1";
 
 const seed: Site[] = [
   { id: "residencial-vila-nova", name: "Residencial Vila Nova", status: "Em execução", start: "2023-08-01", manager: "Antônio Silva", address: "Rua das Flores, 100 — São Paulo, SP", description: "Edifício residencial de 12 andares com 48 unidades." },
   { id: "edificio-atlantico", name: "Edifício Atlântico", status: "Estrutura", start: "2024-02-12", manager: "Marina Lima", address: "Av. Atlântica, 2200 — Santos, SP", description: "Torre comercial de 18 pavimentos." },
   { id: "galpao-industrial-sul", name: "Galpão Industrial Sul", status: "Fundação", start: "2025-01-20", manager: "Marina Lima", address: "Rod. Anchieta, km 32 — Cubatão, SP", description: "Galpão logístico de 8.000 m²." },
-  { id: "sede-administrativa", name: "Sede Administrativa", status: "Operação", start: "2015-03-01", manager: "Carla Mendes", address: "Av. Paulista, 1500 — São Paulo, SP", description: "Sede corporativa da Buca Geral." },
+  { id: "sede-administrativa", name: "Sede Administrativa", status: "Operação", start: "2015-03-01", manager: "Carla Mendes", address: "Av. Paulista, 1500 — São Paulo, SP", description: "Sede corporativa da Bucagrans." },
 ];
 
 let state: Site[] = (() => {

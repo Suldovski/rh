@@ -19,7 +19,7 @@ import { employees } from "@/lib/employees";
 import { sitesStore, useSite } from "@/lib/sites-store";
 
 export const Route = createFileRoute("/obras/$id")({
-  head: () => ({ meta: [{ title: `Obra · Buca Geral RH` }] }),
+  head: () => ({ meta: [{ title: `Obra · Bucagrans RH` }] }),
   component: ObraDetail,
 });
 

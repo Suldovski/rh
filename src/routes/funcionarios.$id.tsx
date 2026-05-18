@@ -22,7 +22,7 @@ import { getEmployee } from "@/lib/employees";
 
 export const Route = createFileRoute("/funcionarios/$id")({
   head: ({ params }) => ({
-    meta: [{ title: `Funcionário #${params.id} · Buca Geral RH` }],
+    meta: [{ title: `Funcionário #${params.id} · Bucagrans RH` }],
   }),
   loader: ({ params }) => {
     const employee = getEmployee(params.id);
