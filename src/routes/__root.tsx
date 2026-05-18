@@ -4,14 +4,18 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { useAuth } from "@/lib/auth-store";
 
 function NotFoundComponent() {
   return (
@@ -59,8 +63,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Buca Geral · RH da Construção" },
-      { name: "description", content: "Sistema de RH para empresas de obras — cadastros, NRs e gestão de canteiro." },
+      { title: "Bucagrans · RH da Construção" },
+      { name: "description", content: "Sistema de RH para empresas de obras — cadastros, folha salarial e gestão de canteiro." },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -86,17 +90,35 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isLogin = pathname === "/login";
+
+  useEffect(() => {
+    if (!auth.currentUserId && !isLogin) {
+      navigate({ to: "/login", search: { redirect: pathname } });
+    }
+  }, [auth.currentUserId, isLogin, navigate, pathname]);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <SidebarProvider>
-        <div className="flex min-h-screen w-full bg-background">
-          <AppSidebar />
-          <div className="flex-1 min-w-0">
-            <Outlet />
+      {isLogin || !auth.currentUserId ? (
+        <>
+          <Outlet />
+          <Toaster />
+        </>
+      ) : (
+        <SidebarProvider>
+          <div className="flex min-h-screen w-full bg-background">
+            <AppSidebar />
+            <div className="flex-1 min-w-0">
+              <Outlet />
+            </div>
           </div>
-        </div>
-        <Toaster />
-      </SidebarProvider>
+          <Toaster />
+        </SidebarProvider>
+      )}
     </QueryClientProvider>
   );
 }
