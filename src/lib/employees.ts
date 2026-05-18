@@ -1,5 +1,13 @@
 export type EmployeeStatus = "ativo" | "ferias" | "afastado" | "desligado";
 
+export interface BankAccount {
+  bank: string;
+  agency: string;
+  account: string;
+  type: "CC" | "CP";
+  pix: string;
+}
+
 export interface Employee {
   id: string;
   name: string;
@@ -17,6 +25,7 @@ export interface Employee {
   pis: string;
   address: string;
   certifications: string[];
+  bank: BankAccount;
 }
 
 export const employees: Employee[] = [
@@ -37,6 +46,7 @@ export const employees: Employee[] = [
     pis: "120.45678.90-1",
     address: "Rua das Acácias, 220 — Itaquera, SP",
     certifications: ["NR-18", "NR-35"],
+    bank: { bank: "Itaú", agency: "0123", account: "45678-9", type: "CC", pix: "123.456.789-00" },
   },
   {
     id: "1043",
@@ -55,6 +65,7 @@ export const employees: Employee[] = [
     pis: "230.56789.01-2",
     address: "Av. Paulista, 1500 — Bela Vista, SP",
     certifications: ["CREA-SP", "PMP", "NR-35"],
+    bank: { bank: "Bradesco", agency: "2233", account: "11223-4", type: "CC", pix: "marina.lima@buca.com.br" },
   },
   {
     id: "1044",
@@ -73,6 +84,7 @@ export const employees: Employee[] = [
     pis: "340.67890.12-3",
     address: "Rua dos Pinheiros, 88 — São Miguel, SP",
     certifications: ["NR-18", "NR-35", "NR-33"],
+    bank: { bank: "Caixa", agency: "0345", account: "00098-7", type: "CP", pix: "345.678.901-22" },
   },
   {
     id: "1045",
@@ -91,6 +103,7 @@ export const employees: Employee[] = [
     pis: "450.78901.23-4",
     address: "Rua Augusta, 940 — Consolação, SP",
     certifications: [],
+    bank: { bank: "Nubank", agency: "0001", account: "55667-8", type: "CC", pix: "(11) 98876-1122" },
   },
   {
     id: "1046",
@@ -109,6 +122,7 @@ export const employees: Employee[] = [
     pis: "560.89012.34-5",
     address: "Rua do Comércio, 12 — Tatuapé, SP",
     certifications: ["NR-18", "NR-35", "NR-33", "NR-06"],
+    bank: { bank: "Santander", agency: "0456", account: "22334-5", type: "CC", pix: "567.890.123-44" },
   },
   {
     id: "1047",
@@ -127,6 +141,7 @@ export const employees: Employee[] = [
     pis: "670.90123.45-6",
     address: "Rua das Palmeiras, 345 — Guarulhos, SP",
     certifications: ["NR-18"],
+    bank: { bank: "Banco do Brasil", agency: "1234", account: "33445-6", type: "CC", pix: "pedro.costa@buca.com.br" },
   },
   {
     id: "1048",
@@ -145,6 +160,7 @@ export const employees: Employee[] = [
     pis: "780.01234.56-7",
     address: "Av. Brigadeiro, 2200 — Jardins, SP",
     certifications: ["CREA-SP", "NR-35", "NR-18"],
+    bank: { bank: "Itaú", agency: "0789", account: "44556-7", type: "CC", pix: "789.012.345-66" },
   },
   {
     id: "1049",
@@ -163,6 +179,7 @@ export const employees: Employee[] = [
     pis: "890.12345.67-8",
     address: "Rua dos Eletricistas, 77 — Mooca, SP",
     certifications: ["NR-10", "NR-35"],
+    bank: { bank: "Inter", agency: "0001", account: "77889-0", type: "CC", pix: "890.123.456-77" },
   },
 ];
 

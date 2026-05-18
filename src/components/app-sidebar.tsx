@@ -6,6 +6,7 @@ import {
   HardHat,
   FileText,
   Settings,
+  Wallet,
 } from "lucide-react";
 
 import {
@@ -30,6 +31,7 @@ const main = [
 
 const ops = [
   { title: "Obras", url: "/obras", icon: HardHat },
+  { title: "Folha Salarial", url: "/folha-salarial", icon: Wallet },
   { title: "Documentos", url: "/documentos", icon: FileText },
 ];
 

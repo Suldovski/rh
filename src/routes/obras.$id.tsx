@@ -1,12 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, HardHat, Calendar, MapPin, User, Users, Pencil, Trash2, FileText } from "lucide-react";
+import { ArrowLeft, HardHat, Calendar, MapPin, User, Users, Pencil, Trash2, FileText, Search } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { PageShell } from "@/components/page-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { StatusBadge } from "@/components/status-badge";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -15,7 +19,7 @@ import { employees } from "@/lib/employees";
 import { sitesStore, useSite } from "@/lib/sites-store";
 
 export const Route = createFileRoute("/obras/$id")({
-  head: ({ params }) => ({ meta: [{ title: `Obra · Buca Geral RH` }] }),
+  head: () => ({ meta: [{ title: `Obra · Buca Geral RH` }] }),
   component: ObraDetail,
 });
 
@@ -24,6 +28,28 @@ function ObraDetail() {
   const obra = useSite(id);
   const navigate = useNavigate();
   const [confirmDel, setConfirmDel] = useState(false);
+  const [q, setQ] = useState("");
+  const [dept, setDept] = useState("todos");
+  const [status, setStatus] = useState("todos");
+
+  const team = useMemo(
+    () => (obra ? employees.filter((e) => e.site === obra.name) : []),
+    [obra],
+  );
+
+  const filtered = useMemo(() => {
+    return team.filter((e) => {
+      const matchesQ =
+        !q ||
+        e.name.toLowerCase().includes(q.toLowerCase()) ||
+        e.cpf.includes(q) ||
+        e.id.includes(q) ||
+        e.role.toLowerCase().includes(q.toLowerCase());
+      const matchesDept = dept === "todos" || e.department === dept;
+      const matchesStatus = status === "todos" || e.status === status;
+      return matchesQ && matchesDept && matchesStatus;
+    });
+  }, [team, q, dept, status]);
 
   if (!obra) {
     return (
@@ -35,8 +61,6 @@ function ObraDetail() {
       </PageShell>
     );
   }
-
-  const team = employees.filter((e) => e.site === obra.name);
 
   return (
     <PageShell
@@ -79,27 +103,64 @@ function ObraDetail() {
 
         <div className="space-y-4">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between gap-3">
               <CardTitle className="font-display text-lg">Equipe alocada</CardTitle>
+              <Badge variant="secondary">{filtered.length} / {team.length}</Badge>
             </CardHeader>
-            <CardContent className="px-0">
-              {team.length === 0 ? (
-                <p className="px-6 py-6 text-sm text-muted-foreground">Nenhum colaborador alocado nesta obra.</p>
+            <CardContent className="space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-1 min-w-[200px] items-center gap-2 rounded-md border border-input px-3">
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="Buscar por nome, função, CPF ou matrícula"
+                    className="h-9 border-0 bg-transparent shadow-none focus-visible:ring-0"
+                  />
+                </div>
+                <Select value={dept} onValueChange={setDept}>
+                  <SelectTrigger className="w-[170px]"><SelectValue placeholder="Departamento" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos depts.</SelectItem>
+                    <SelectItem value="Obra">Obra</SelectItem>
+                    <SelectItem value="Engenharia">Engenharia</SelectItem>
+                    <SelectItem value="Seguranca">Segurança</SelectItem>
+                    <SelectItem value="Administrativo">Administrativo</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={status} onValueChange={setStatus}>
+                  <SelectTrigger className="w-[150px]"><SelectValue placeholder="Status" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos status</SelectItem>
+                    <SelectItem value="ativo">Ativo</SelectItem>
+                    <SelectItem value="ferias">Férias</SelectItem>
+                    <SelectItem value="afastado">Afastado</SelectItem>
+                    <SelectItem value="desligado">Desligado</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {filtered.length === 0 ? (
+                <p className="py-6 text-center text-sm text-muted-foreground">
+                  {team.length === 0 ? "Nenhum colaborador alocado nesta obra." : "Nenhum resultado para os filtros aplicados."}
+                </p>
               ) : (
-                <ul className="divide-y divide-border">
-                  {team.map((p) => (
+                <ul className="divide-y divide-border rounded-md border border-border">
+                  {filtered.map((p) => (
                     <li key={p.id}>
                       <Link
                         to="/funcionarios/$id"
                         params={{ id: p.id }}
-                        className="flex items-center gap-3 px-6 py-3 hover:bg-muted/50"
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-muted/50"
                       >
                         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
                           {p.name.split(" ").slice(0, 2).map((n) => n[0]).join("")}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate font-semibold text-sm">{p.name}</p>
-                          <p className="truncate text-xs text-muted-foreground">{p.role} · {p.department === "Seguranca" ? "Segurança" : p.department}</p>
+                          <p className="truncate text-xs text-muted-foreground">
+                            #{p.id} · {p.role} · {p.department === "Seguranca" ? "Segurança" : p.department}
+                          </p>
                         </div>
                         <StatusBadge status={p.status} />
                       </Link>
